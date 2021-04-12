@@ -35,3 +35,6 @@ Route::post('/nova_categoria', 'CategoriasPalavrasController@create')->name('nov
 
 //---------------------- EXIBE CATEGORIAS DE PALAVRAS ----------------------------
 Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPalavras')->name('index_categoria');
+
+//---------------------- DELETA CATEGORIAS DE PALAVRAS ----------------------------
+Route::get('/deleta_categoriaPalavra/{id}', 'CategoriasPalavrasController@deleta_categoriaPalavra')->name('deleta_categoria');

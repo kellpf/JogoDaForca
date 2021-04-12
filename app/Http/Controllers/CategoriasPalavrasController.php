@@ -32,9 +32,13 @@ class CategoriasPalavrasController extends Controller
         }
     }
 
-
     public function exibe_categoriasPalavras(){
         $categoriaPalavras = CategoriasPalavras::all();
         return view('exibeCategorias', ['categoriaPalavras' => $categoriaPalavras]);
+    }
+
+    public function deleta_categoriaPalavra($id){
+        CategoriasPalavras::destroy($id);
+        return redirect()->route('deleta_categoria');
     }
 }

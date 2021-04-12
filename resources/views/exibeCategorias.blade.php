@@ -12,7 +12,7 @@
     <h3>Categorias de palavras</h3>
     <ul>
         @foreach($categoriaPalavras as $categoriaPalavra)
-        <li>{{ $categoriaPalavra->group }}</li>
+        <li>{{ $categoriaPalavra->group }}<a href="{{route('deleta_categoria', ['id'=>$categoriaPalavra->id])}}">Deletar</a></li>
         @endforeach
     </ul>
 </body>
