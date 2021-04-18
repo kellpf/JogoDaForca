@@ -28,8 +28,9 @@ class AdminController extends Controller
         return view('deletaJogadores', ['jogadores' => $jogadores]);
     }
 
-    public function deleta_jogador($id){
-        Jogadores::destroy($id);
-        return redirect()->route('deleta_jogador');
+    public function deleta_jogador(Request $request){
+        //dd($request->id);
+        Jogadores::destroy($request->id);
+        return 'Ok';
     }
 }

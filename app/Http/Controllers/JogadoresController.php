@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoriasPalavras;
 use App\Models\Jogadores;
+use App\Models\Palavras;
 use Illuminate\Http\Request;
 
 class JogadoresController extends Controller
@@ -26,18 +28,21 @@ class JogadoresController extends Controller
     public function create(Request $request)
     {
         $nick = $request->nick; // GET OF DATA 
+        $group_word = $request->group_word;
+        if(empty($group_word)){
+            $categoria = CategoriasPalavras::all()->random(1);
+            $group_word = $categoria[0]->id;
+        }
         if (!Jogadores::where('name', $request->nick)->first() && $nick != null) {
             $jogador = new Jogadores();
             $jogador->name = $nick;
-            $jogador->password = '312';
-            $jogador->id_user_type = '2';
+            $jogador->group_of_words_id = $group_word;
             $jogador->available_tips = '0';
             $jogador->punctuation = '0';
             $jogador->save();
         } else {
             $request->session()->flash('flash_erro', '');
         }
-
         return redirect()->route('index');
     }
 }

@@ -24,7 +24,7 @@ class CategoriasPalavrasController extends Controller
         if(!CategoriasPalavras::where('group', $request->categoria)->first()){
             $categoriaPalavra = new CategoriasPalavras();
             $categoriaPalavra->group = $categoria;
-            $categoriaPalavra->id = '11';
+        //    $categoriaPalavra->id = '15';
             $categoriaPalavra->save();
         }
         else {
