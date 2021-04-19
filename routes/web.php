@@ -38,3 +38,14 @@ Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPa
 
 //---------------------- DELETA CATEGORIAS DE PALAVRAS ----------------------------
 Route::get('/deleta_categoriaPalavra/{id}', 'CategoriasPalavrasController@deleta_categoriaPalavra')->name('deleta_categoria');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
