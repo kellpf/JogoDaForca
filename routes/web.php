@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 //---------------------- CADASTRO JOGADOR ----------------------------------
 Route::get('/', 'JogadoresController@index')->name('index');
+
 Route::post('/novo_jogador', 'JogadoresController@create')->name('novo_jogador');
 
 //---------------------- EXIBE JOGADOR -------------------------------------
@@ -34,7 +35,7 @@ Route::get('/categorias', 'CategoriasPalavrasController@nova_categoria')->name('
 Route::post('/nova_categoria', 'CategoriasPalavrasController@create')->name('nova_categoria');
 
 //---------------------- EXIBE CATEGORIAS DE PALAVRAS ----------------------------
-Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPalavras')->name('index_categoria');
+//Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPalavras')->name('index_categoria');
 
 //---------------------- DELETA CATEGORIAS DE PALAVRAS ----------------------------
 Route::get('/deleta_categoriaPalavra/{id}', 'CategoriasPalavrasController@deleta_categoriaPalavra')->name('deleta_categoria');
@@ -42,10 +43,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

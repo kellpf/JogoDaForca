@@ -16,7 +16,8 @@ class JogadoresController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $categoriaPalavras = CategoriasPalavras::all();
+        return view('welcome', ['categoriaPalavras' => $categoriaPalavras]);
     }
 
     /**
@@ -41,7 +42,7 @@ class JogadoresController extends Controller
             $jogador->punctuation = '0';
             $jogador->save();
         } else {
-            $request->session()->flash('flash_erro', '');
+            $request->session()->flash('flash_erro', 'teste');
         }
         return redirect()->route('index');
     }

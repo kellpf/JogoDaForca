@@ -25,12 +25,11 @@ class AdminController extends Controller
 
     public function exibe_jogadores(){
         $jogadores = Jogadores::all();
-        return view('deletaJogadores', ['jogadores' => $jogadores]);
+        return view('jogadores', ['jogadores' => $jogadores]);
     }
 
-    public function deleta_jogador(Request $request){
-        //dd($request->id);
-        Jogadores::destroy($request->id);
-        return 'Ok';
+    public function deleta_jogador($id){
+        Jogadores::destroy($id);
+        return redirect()->route('exibe_jogadores');
     }
 }
