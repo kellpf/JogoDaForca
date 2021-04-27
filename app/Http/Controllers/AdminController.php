@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Jogadores;
 use Illuminate\Http\Request;
+use App\Models\CategoriasPalavras;
 
 class AdminController extends Controller
 {
@@ -32,4 +34,6 @@ class AdminController extends Controller
         Jogadores::destroy($id);
         return redirect()->route('exibe_jogadores');
     }
+
+  
 }

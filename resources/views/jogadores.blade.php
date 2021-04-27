@@ -16,10 +16,6 @@
         </ul>
     </div>
 
-    <div class="row d-flex justify-content-end">
-        <button type="button" class="btn btn-success pl-5 pr-5 p-2">+ Jogador</button>
-    </div>
-
     <div class="row">
         <table class="table table-striped mt-4">
             <thead>

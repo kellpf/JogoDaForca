@@ -35,12 +35,15 @@ Route::get('/categorias', 'CategoriasPalavrasController@nova_categoria')->name('
 Route::post('/nova_categoria', 'CategoriasPalavrasController@create')->name('nova_categoria');
 
 //---------------------- EXIBE CATEGORIAS DE PALAVRAS ----------------------------
-//Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPalavras')->name('index_categoria');
+Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPalavras')->name('index_categoria');
 
 //---------------------- DELETA CATEGORIAS DE PALAVRAS ----------------------------
 Route::get('/deleta_categoriaPalavra/{id}', 'CategoriasPalavrasController@deleta_categoriaPalavra')->name('deleta_categoria');
-Auth::routes();
 
+//---------------------- EXIBE PALAVRA POR ID --------------------------------------
+Route::get('/exibe_palavra/{id}', 'CategoriasPalavrasController@busca_palavra')->name('busca_palavra');
+
+Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 

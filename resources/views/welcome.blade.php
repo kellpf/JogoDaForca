@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Jogo da Forca</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,6 @@
     <!-- Styles -->
     <style>
         /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
-  
     </style>
 
     <style>
@@ -27,51 +26,47 @@
 
 <body>
 
-@yield('layouts.app')
-        <div class="col-md-12 justify-content-lg-end d-flex p-3" style="background-color: #1C1C1C;">
-            <a href="{{route('home')}}" style="color: white;">Admin</a>
-        </div>
+@extends('layouts.app')
 
+@section('content')
+  
+ <h3 class="mt-5 d-flex justify-content-center">Jogo da Forca</h3>
 
-        <h3 class="mt-5 d-flex justify-content-center">Jogo da Forca</h3>
+    <div class="form-group d-flex justify-content-center mt-5">
+        <form action="{{route('novo_jogador')}}" method="post">
 
-        <div class="form-group d-flex justify-content-center mt-5">
-            <form action="{{route('novo_jogador')}}" method="post">
+            {{csrf_field()}}
 
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-
-                @if (Session::has('flash_erro'))
-                <div class="alert alert-danger" role="alert">
+            @if (Session::has('flash_erro'))
+            <div class="alert alert-danger" role="alert">
 
                 Este apelido já é usado por outro jogador. Por favor, escolha outro.
-                </div>
-                @endif
+            </div>
+            @endif
 
-                <div class="mb-3 col-md-12" >
-                    <label for="nick" class="form-label" placeholder="Escolha um apelido">Apelido</label>
-                    <input type="text" class="form-control" id="nick" name="nick" required>
-                </div>
+            <div class="mb-3">
+                <label for="nick" class="form-label" placeholder="Escolha um apelido">Apelido</label>
+                <input type="text" class="form-control" id="nick" name="nick" required>
+            </div>
 
-             
 
-                <div class="mb-3">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Selecione uma palavra</option>
-                        @foreach($categoriaPalavras as $categoriaPalavra)
-                        <option value="{{$categoriaPalavra->id}}">{{$categoriaPalavra->id}}-{{$categoriaPalavra->group}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="d-flex justify-content-center">
+            <div class="mb-3">
+                <select class="form-select" aria-label="Default select example" name="group_word" id="group_word">
+                    <option selected value="0">Selecione uma palavra</option>
+                    @foreach($categoriaPalavras as $categoriaPalavra)
+                    <option value="{{$categoriaPalavra->id}}">{{$categoriaPalavra->id}}-{{$categoriaPalavra->group}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-dark">Jogar</button>
-                </div>
-            </form>
-        </div>
-        
+            </div>
+        </form>
+    </div>
 
-        
- 
+
+    @endsection
+
 </body>
 
 </html>

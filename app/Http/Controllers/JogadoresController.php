@@ -30,11 +30,30 @@ class JogadoresController extends Controller
     {
         $nick = $request->nick; // GET OF DATA 
         $group_word = $request->group_word;
-        if(empty($group_word)){
+        if ($group_word == 0) {
             $categoria = CategoriasPalavras::all()->random(1);
             $group_word = $categoria[0]->id;
         }
-        if (!Jogadores::where('name', $request->nick)->first() && $nick != null) {
+        $palavras = Palavras::where('group_id', $group_word)->get()->random(1);
+        $letras = array();
+
+        $dica = '';
+        foreach ($palavras as $palavra) {
+            $dica = $palavra->word_tip;
+            $word = $palavra->word;
+        }
+
+        for ($i = 0; $i < strlen($word); $i++) {
+            $letras[$i] = $word[$i];
+        }
+
+        $nameJogador = Jogadores::where('name', $request->nick)->get();
+        $consultaJogador = null;
+        foreach ($nameJogador as $name) {
+            $consultaJogador = $name->name;
+        }
+
+        if ($nick != 'bruno') {
             $jogador = new Jogadores();
             $jogador->name = $nick;
             $jogador->group_of_words_id = $group_word;
@@ -42,8 +61,9 @@ class JogadoresController extends Controller
             $jogador->punctuation = '0';
             $jogador->save();
         } else {
-            $request->session()->flash('flash_erro', 'teste');
+            $request->session()->flash('flash_erro', '');
         }
-        return redirect()->route('index');
+
+        return view('jogo', compact('dica', 'letras'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoriasPalavras;
+use App\Models\Palavras;
 use Illuminate\Http\Request;
 
 class CategoriasPalavrasController extends Controller
@@ -18,26 +19,36 @@ class CategoriasPalavrasController extends Controller
         return view('novaCategoria');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $categoria = $request->categoria;
 
-        if(!CategoriasPalavras::where('group', $request->categoria)->first()){
+        if (!CategoriasPalavras::where('group', $request->categoria)->first()) {
             $categoriaPalavra = new CategoriasPalavras();
             $categoriaPalavra->group = $categoria;
-        //    $categoriaPalavra->id = '15';
             $categoriaPalavra->save();
-        }
-        else {
+        } else {
             $request->session()->flash('flash_erro', '');
         }
     }
 
-    public function exibe_categoriasPalavras(){
-        $categoriaPalavras = CategoriasPalavras::all();
-        return view('exibeCategorias', ['categoriaPalavras' => $categoriaPalavras]);
+    public function exibe_categoriasPalavras()
+    {
+        // $categoriaPalavras = CategoriasPalavras::join('words', 'group_id', '=', 'words.id')->select('word')->get();
+        $categorias = CategoriasPalavras::all();
+        // $palavras = Palavras::all();
+
+        return view('exibeCategorias', compact('categorias'));
     }
 
-    public function deleta_categoriaPalavra($id){
+    public function busca_palavra($id) 
+    {
+        $palavras = Palavras::where('group_id', $id)->get();
+        return view('teste', compact('palavras'));
+    }
+
+    public function deleta_categoriaPalavra($id)
+    {
         CategoriasPalavras::destroy($id);
         return redirect()->route('deleta_categoria');
     }
