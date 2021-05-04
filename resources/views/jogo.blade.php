@@ -24,7 +24,7 @@
 </div>
 <br><div id="divMensagem" style="display: {{session('divMensagemShow')}};" class="row justify-content-center alert alert-info" role="alert"><h3>{{session('divMensagem')}}</h3></div>
 </div>
-<form method="post" actiion="#">
+<form method="" action="/atualizarDadosDaPartida">
     {{ csrf_field() }}
 {{--     <div class="row justify-content-center" id="divAdivinharLetra"> --}}
         {{-- G #00FA9A --}}

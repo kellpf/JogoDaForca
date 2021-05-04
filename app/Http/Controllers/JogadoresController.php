@@ -258,7 +258,16 @@ public function carregarPalavra() {
     }
     session(['group_word' => $group_word]);
 
-    $palavras = Palavras::where('group_id', $group_word)->get()->random(1);
+    #$palavras = Palavras::where('group_id', $group_word)->whereRaw("NOT EXISTS (SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ".session('jogadorId').")")->get()->random(1);
+try {
+    $palavras = DB::select('SELECT * FROM words WHERE NOT EXISTS (
+        SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ?
+        )
+        LIMIT 1
+        ', [session('jogadorId')]);
+} catch (Exception $e) {
+    return view('tryJogo');
+}
     $letras = array();
 
     $dica = '';
@@ -317,12 +326,15 @@ public function atualizarDadosDaPartida(Request $request) {
         } else {
             $this->sequenciaDoJogo('continuar');
         }
+
         $this->salvaPontuacao();
 
+        DB::update('update players_words set status = 1 where player_id = ? and status = ?', [session('jogadorId'), 0]);
+/*
         $jogadoresPalavrasModel = JogadoresPalavrasModel::where('player_id', session('jogadorId'))->where('status', 0);
         $jogadoresPalavrasModel->status = 1;
         $jogadoresPalavrasModel->save();
-
+*/
         if(session('sequenciaDoJogo') == 'continuar') {
 
                 $this->carregarPalavra();
@@ -330,8 +342,7 @@ public function atualizarDadosDaPartida(Request $request) {
                 return redirect('/jogoDaForca');
 
         } else {
-                return 'Game Over!';
-                #return redirect('/ranking');
+                return view('gameOver');
         }
 
 }
@@ -341,7 +352,6 @@ public function sequenciaDoJogo($sequenciaDoJogo) {
 }
 
 public function salvaPontuacao() {
-
     #Salvar a pontuação antes do fim da partida antes de fazer o update: session('pontuacao');
     if(session('sequenciaDoJogo') == 'parar'){
         #se errou a palavra

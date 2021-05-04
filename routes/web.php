@@ -25,6 +25,7 @@ Route::post('/novo_jogador', 'JogadoresController@create')->name('novo_jogador')
 Route::get('/jogoDaForca', 'JogadoresController@jogo')->name('jogo');
 Route::get('/jogoRevelaLetra/{players_words_id}/{letra}', 'JogadoresController@jogoRevelaLetra')->name('jogoRevelaLetra');
 Route::get('/palavraSessao/{palavra}', 'JogadoresController@palavraSessao')->name('palavraSessao');
+Route::get('/atualizarDadosDaPartida', 'JogadoresController@atualizarDadosDaPartida')->name('atualizarDadosDaPartida');
 
 //---------------------- EXIBE JOGADOR -------------------------------------
 Route::get('/exibe_jogadores', 'AdminController@exibe_jogadores')->name('exibe_jogadores');
