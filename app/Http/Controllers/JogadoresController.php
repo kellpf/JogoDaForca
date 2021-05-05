@@ -115,7 +115,9 @@ class JogadoresController extends Controller
             session(['jogadorId' => $jogador->id]);
 
             $this->zeraSessoes();
-
+            session(['dicasDisponiveis' => 0]);
+            session(['dicasUsadas' => 0]);
+        
         /* Início palavra inicial */
 
             #return view('jogo', compact('dica', 'letras'));
@@ -130,6 +132,7 @@ class JogadoresController extends Controller
     }
 
 public function jogo() {
+
     $jogadorId = session('jogadorId');
     if($jogadorId ==null ) {
         return redirect('/');
@@ -137,7 +140,7 @@ public function jogo() {
 
     $jogadores = Jogadores::where('id', $jogadorId)->get();
     $jogadoresPalavrasModel = JogadoresPalavrasModel::where('player_id', $jogadorId)->where('status', 0)->get();
-    $palavras = Palavras::where('id', $jogadoresPalavrasModel[0]->word_id)->get();
+    try { $palavras = Palavras::where('id', $jogadoresPalavrasModel[0]->word_id)->get(); } catch (Exception $e) { return view('tryJogo'); }
     $letras = array();
     $dica = '';
     foreach ($palavras as $palavra) {
@@ -251,48 +254,53 @@ public function jogoRevelaLetra(Request $request) {
 }
 
 public function carregarPalavra() {
+
+    #$palavras = Palavras::where('group_id', $group_word)->whereRaw("NOT EXISTS (SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ".session('jogadorId').")")->get()->random(1);
+try {
+
     $group_word = session('is_randon_group_word');
-    if ($group_word == 0) {
+    if ($group_word == '0') {
         $categoria = CategoriasPalavras::all()->random(1);
         $group_word = $categoria[0]->id;
     }
     session(['group_word' => $group_word]);
 
-    #$palavras = Palavras::where('group_id', $group_word)->whereRaw("NOT EXISTS (SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ".session('jogadorId').")")->get()->random(1);
-try {
-    $palavras = DB::select('SELECT * FROM words WHERE NOT EXISTS (
+        $palavras = DB::select('SELECT * FROM words WHERE NOT EXISTS (
         SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ?
-        )
+        ) and group_id = ?
         LIMIT 1
-        ', [session('jogadorId')]);
+        ', [session('jogadorId'), $group_word]);
+
+$letras = array();
+
+$dica = '';
+foreach ($palavras as $palavra) {
+    $dica = $palavra->word_tip;
+    $idPalavra = $palavra->id;
+    $word = $palavra->word;
+}
+session(['word' => $word]);
+
+for ($i = 0; $i < strlen($word); $i++) {
+    $letras[$i] = $word[$i];
+}
+
+    $jogadorPalavra = new JogadoresPalavrasModel();
+    $jogadorPalavra->player_id = session('jogadorId');
+    $jogadorPalavra->word_id = $idPalavra;
+    $jogadorPalavra->status = '0';
+try { $jogadorPalavra->L1 = $letras[0]; } catch (Exception $e) {}  try { $jogadorPalavra->L2 = $letras[1]; } catch (Exception $e) {}  try { $jogadorPalavra->L3 = $letras[2]; } catch (Exception $e) {}  try { $jogadorPalavra->L4 = $letras[3]; } catch (Exception $e) {}  try { $jogadorPalavra->L5 = $letras[4]; } catch (Exception $e) {}  try { $jogadorPalavra->L6 = $letras[5]; } catch (Exception $e) {}  try { $jogadorPalavra->L7 = $letras[6]; } catch (Exception $e) {}  try { $jogadorPalavra->L8 = $letras[7]; } catch (Exception $e) {}  try { $jogadorPalavra->L9 = $letras[8]; } catch (Exception $e) {}  try { $jogadorPalavra->L10 = $letras[9]; } catch (Exception $e) {}  try { $jogadorPalavra->L11 = $letras[10]; } catch (Exception $e) {}  try { $jogadorPalavra->L12 = $letras[11]; } catch (Exception $e) {}  try { $jogadorPalavra->L13 = $letras[12]; } catch (Exception $e) {}  try { $jogadorPalavra->L14 = $letras[13]; } catch (Exception $e) {}  try { $jogadorPalavra->L15 = $letras[14]; } catch (Exception $e) {}  try { $jogadorPalavra->L16 = $letras[15]; } catch (Exception $e) {}  try { $jogadorPalavra->L17 = $letras[16]; } catch (Exception $e) {}  try { $jogadorPalavra->L18 = $letras[17]; } catch (Exception $e) {}  try { $jogadorPalavra->L19 = $letras[18]; } catch (Exception $e) {}  try { $jogadorPalavra->L20 = $letras[19]; } catch (Exception $e) {}  try { $jogadorPalavra->L21 = $letras[20]; } catch (Exception $e) {}  try { $jogadorPalavra->L22 = $letras[21]; } catch (Exception $e) {}  try { $jogadorPalavra->L23 = $letras[22]; } catch (Exception $e) {}  try { $jogadorPalavra->L24 = $letras[23]; } catch (Exception $e) {}  try { $jogadorPalavra->L25 = $letras[24]; } catch (Exception $e) {}  try { $jogadorPalavra->L26 = $letras[25]; } catch (Exception $e) {}  try { $jogadorPalavra->L27 = $letras[26]; } catch (Exception $e) {}  try { $jogadorPalavra->L28 = $letras[27]; } catch (Exception $e) {}  try { $jogadorPalavra->L29 = $letras[28]; } catch (Exception $e) {}  try { $jogadorPalavra->L30 = $letras[29]; } catch (Exception $e) {}  try { $jogadorPalavra->L31 = $letras[30]; } catch (Exception $e) {}  try { $jogadorPalavra->L32 = $letras[31]; } catch (Exception $e) {}  try { $jogadorPalavra->L33 = $letras[32]; } catch (Exception $e) {}  try { $jogadorPalavra->L34 = $letras[33]; } catch (Exception $e) {}  try { $jogadorPalavra->L35 = $letras[34]; } catch (Exception $e) {}  try { $jogadorPalavra->L36 = $letras[35]; } catch (Exception $e) {}  try { $jogadorPalavra->L37 = $letras[36]; } catch (Exception $e) {}  try { $jogadorPalavra->L38 = $letras[37]; } catch (Exception $e) {}  try { $jogadorPalavra->L39 = $letras[38]; } catch (Exception $e) {}  try { $jogadorPalavra->L40 = $letras[39]; } catch (Exception $e) {}  try { $jogadorPalavra->L41 = $letras[40]; } catch (Exception $e) {}  try { $jogadorPalavra->L42 = $letras[41]; } catch (Exception $e) {}  try { $jogadorPalavra->L43 = $letras[42]; } catch (Exception $e) {}  try { $jogadorPalavra->L44 = $letras[43]; } catch (Exception $e) {}  try { $jogadorPalavra->L45 = $letras[44]; } catch (Exception $e) {}  try { $jogadorPalavra->L46 = $letras[45]; } catch (Exception $e) {}
+    $jogadorPalavra->save();
+    $this->zeraSessoes();
+    for($i=0;$i<46;$i++) {
+        session(['L'.$i => '']);
+    }
+
 } catch (Exception $e) {
+    #Calcular pontos e zerar sessão
     return view('tryJogo');
 }
-    $letras = array();
-
-    $dica = '';
-    foreach ($palavras as $palavra) {
-        $dica = $palavra->word_tip;
-        $idPalavra = $palavra->id;
-        $word = $palavra->word;
-    }
-    session(['word' => $word]);
-
-    for ($i = 0; $i < strlen($word); $i++) {
-        $letras[$i] = $word[$i];
-    }
-
-        $jogadorPalavra = new JogadoresPalavrasModel();
-        $jogadorPalavra->player_id = session('jogadorId');
-        $jogadorPalavra->word_id = $idPalavra;
-        $jogadorPalavra->status = '0';
-try { $jogadorPalavra->L1 = $letras[0]; } catch (Exception $e) {}  try { $jogadorPalavra->L2 = $letras[1]; } catch (Exception $e) {}  try { $jogadorPalavra->L3 = $letras[2]; } catch (Exception $e) {}  try { $jogadorPalavra->L4 = $letras[3]; } catch (Exception $e) {}  try { $jogadorPalavra->L5 = $letras[4]; } catch (Exception $e) {}  try { $jogadorPalavra->L6 = $letras[5]; } catch (Exception $e) {}  try { $jogadorPalavra->L7 = $letras[6]; } catch (Exception $e) {}  try { $jogadorPalavra->L8 = $letras[7]; } catch (Exception $e) {}  try { $jogadorPalavra->L9 = $letras[8]; } catch (Exception $e) {}  try { $jogadorPalavra->L10 = $letras[9]; } catch (Exception $e) {}  try { $jogadorPalavra->L11 = $letras[10]; } catch (Exception $e) {}  try { $jogadorPalavra->L12 = $letras[11]; } catch (Exception $e) {}  try { $jogadorPalavra->L13 = $letras[12]; } catch (Exception $e) {}  try { $jogadorPalavra->L14 = $letras[13]; } catch (Exception $e) {}  try { $jogadorPalavra->L15 = $letras[14]; } catch (Exception $e) {}  try { $jogadorPalavra->L16 = $letras[15]; } catch (Exception $e) {}  try { $jogadorPalavra->L17 = $letras[16]; } catch (Exception $e) {}  try { $jogadorPalavra->L18 = $letras[17]; } catch (Exception $e) {}  try { $jogadorPalavra->L19 = $letras[18]; } catch (Exception $e) {}  try { $jogadorPalavra->L20 = $letras[19]; } catch (Exception $e) {}  try { $jogadorPalavra->L21 = $letras[20]; } catch (Exception $e) {}  try { $jogadorPalavra->L22 = $letras[21]; } catch (Exception $e) {}  try { $jogadorPalavra->L23 = $letras[22]; } catch (Exception $e) {}  try { $jogadorPalavra->L24 = $letras[23]; } catch (Exception $e) {}  try { $jogadorPalavra->L25 = $letras[24]; } catch (Exception $e) {}  try { $jogadorPalavra->L26 = $letras[25]; } catch (Exception $e) {}  try { $jogadorPalavra->L27 = $letras[26]; } catch (Exception $e) {}  try { $jogadorPalavra->L28 = $letras[27]; } catch (Exception $e) {}  try { $jogadorPalavra->L29 = $letras[28]; } catch (Exception $e) {}  try { $jogadorPalavra->L30 = $letras[29]; } catch (Exception $e) {}  try { $jogadorPalavra->L31 = $letras[30]; } catch (Exception $e) {}  try { $jogadorPalavra->L32 = $letras[31]; } catch (Exception $e) {}  try { $jogadorPalavra->L33 = $letras[32]; } catch (Exception $e) {}  try { $jogadorPalavra->L34 = $letras[33]; } catch (Exception $e) {}  try { $jogadorPalavra->L35 = $letras[34]; } catch (Exception $e) {}  try { $jogadorPalavra->L36 = $letras[35]; } catch (Exception $e) {}  try { $jogadorPalavra->L37 = $letras[36]; } catch (Exception $e) {}  try { $jogadorPalavra->L38 = $letras[37]; } catch (Exception $e) {}  try { $jogadorPalavra->L39 = $letras[38]; } catch (Exception $e) {}  try { $jogadorPalavra->L40 = $letras[39]; } catch (Exception $e) {}  try { $jogadorPalavra->L41 = $letras[40]; } catch (Exception $e) {}  try { $jogadorPalavra->L42 = $letras[41]; } catch (Exception $e) {}  try { $jogadorPalavra->L43 = $letras[42]; } catch (Exception $e) {}  try { $jogadorPalavra->L44 = $letras[43]; } catch (Exception $e) {}  try { $jogadorPalavra->L45 = $letras[44]; } catch (Exception $e) {}  try { $jogadorPalavra->L46 = $letras[45]; } catch (Exception $e) {}
-        $jogadorPalavra->save();
-        $this->zeraSessoes();
-        for($i=0;$i<46;$i++) {
-            session(['L'.$i => '']);
-        }
-
+ 
 
 }
 
@@ -315,6 +323,7 @@ public function zeraSessoes() {
     session(['B' => '']);            session(['N' => '']);            session(['M' => '']);
 
     session(['divMensagemShow' => '']);
+    session(['divMensagem' => '']);
 
 }
 public function atualizarDadosDaPartida(Request $request) {
@@ -363,4 +372,24 @@ public function salvaPontuacao() {
 
 }
 
+public function adicionaDica() {    
+    if(session('dicasDisponiveis') <3 ) {
+        session(['dicasDisponiveis' => session('dicasDisponiveis')+1]);
+    }
 }
+
+public function pedeDica() {
+    if(session('dicasDisponiveis') > 0  && session('dicasDisponiveis') < 4 && session('dicasUsadas') <3) {
+        session(['dicasUsadas' => session('dicasUsadas')+1]);
+    }
+}
+
+
+}
+
+/*
+Diferencial:
+A cada duas palavras, ganha uma dica
+Dicas, limite de 3 dicas
+Só pode usar uma dica por palavra
+*/
