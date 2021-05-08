@@ -15,10 +15,23 @@
 <input id="acertos" type="hidden" value="{{session('acertos')}}">
 <input id="validaLetra" type="hidden" value="{{session('validaLetra')}}">
 <input id="ultimaLetra" type="hidden" value="{{session('ultimobotaoclicado')}}">
-<div class="row justify-content-center">
+<div id="dicasDoUsuario" class="row justify-content-center">
     <img src="{{ asset('storage/image/forca/'.session('erros').'.png') }}" alt="HTML5 Doctor Logo" width="200px" heidth="100px"/>
 </div>
-<br>
+
+<div class="row justify-content-center">
+    <img src="{{ asset('storage/image/dicas/'.'U'.session('dicasUsadas').'.png') }}" alt="HTML5 Doctor Logo" width="200px" heidth="100px"/>
+</div>
+<div class="row justify-content-center">
+    <span>Dicas Disponíveis</span>
+</div>
+<div id="dicasDisponiveis" class="row justify-content-center">
+    <input type="text" id="dicasDisponiveis" value="{{session('dicasDisponiveis')}}" style="width: 400px;" disabled>
+    <button type="button" class="btn btn-warning"><strong>Pedir Dica</strong></button>
+</div>
+<div class="row justify-content-center">
+    <span>Letras Já Utilizadas</span>
+</div>
 <div id="divLetrasUsadas" class="row justify-content-center">
     <input type="text" id="letrasUsadas" value="{{session('letrasEmTela')}}" style="width: 400px;" disabled>
 </div>

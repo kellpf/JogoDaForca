@@ -117,7 +117,7 @@ class JogadoresController extends Controller
             $this->zeraSessoes();
             session(['dicasDisponiveis' => 0]);
             session(['dicasUsadas' => 0]);
-        
+
         /* Início palavra inicial */
 
             #return view('jogo', compact('dica', 'letras'));
@@ -271,19 +271,19 @@ try {
         LIMIT 1
         ', [session('jogadorId'), $group_word]);
 
-$letras = array();
+        $letras = array();
 
-$dica = '';
-foreach ($palavras as $palavra) {
-    $dica = $palavra->word_tip;
-    $idPalavra = $palavra->id;
-    $word = $palavra->word;
-}
-session(['word' => $word]);
+        $dica = '';
+        foreach ($palavras as $palavra) {
+            $dica = $palavra->word_tip;
+            $idPalavra = $palavra->id;
+            $word = $palavra->word;
+        }
+        session(['word' => $word]);
 
-for ($i = 0; $i < strlen($word); $i++) {
-    $letras[$i] = $word[$i];
-}
+        for ($i = 0; $i < strlen($word); $i++) {
+            $letras[$i] = $word[$i];
+        }
 
     $jogadorPalavra = new JogadoresPalavrasModel();
     $jogadorPalavra->player_id = session('jogadorId');
@@ -300,7 +300,7 @@ try { $jogadorPalavra->L1 = $letras[0]; } catch (Exception $e) {}  try { $jogado
     #Calcular pontos e zerar sessão
     return view('tryJogo');
 }
- 
+
 
 }
 
@@ -339,6 +339,7 @@ public function atualizarDadosDaPartida(Request $request) {
         $this->salvaPontuacao();
 
         DB::update('update players_words set status = 1 where player_id = ? and status = ?', [session('jogadorId'), 0]);
+        $this->adicionaDica();
 /*
         $jogadoresPalavrasModel = JogadoresPalavrasModel::where('player_id', session('jogadorId'))->where('status', 0);
         $jogadoresPalavrasModel->status = 1;
@@ -372,7 +373,35 @@ public function salvaPontuacao() {
 
 }
 
-public function adicionaDica() {    
+public function calcularDica() {
+
+    session(['dicasDisponiveis' => 2]);
+    session(['dicasUsadas' => 2]);
+
+    $dicas = JogadoresPalavrasModel::where('player_id', 98 /*session('jogadorId')*/)->where('status', 1)->select(DB::raw('round(COUNT(*)/3 ,0) as dica'))->get();
+    $qtdDicas = 0;
+    foreach($dicas as $dica) {
+        $qtdDicas = $dica->dica;
+    }
+
+    if($qtdDicas > 3) {
+        $qtdDicas = 3;
+    }
+
+    if($qtdDicas > session('dicasDisponiveis')) {
+        session(['dicasDisponiveis' => ( $qtdDicas - session('dicasUsadas') ) ]);
+    }
+
+    if(session('dicasDisponiveis')<0) {
+        session(['dicasDisponiveis' => 0]);
+    }
+
+    return session('dicasDisponiveis');
+    #session('dicasUsadas');
+
+}
+
+public function adicionaDica() {
     if(session('dicasDisponiveis') <3 ) {
         session(['dicasDisponiveis' => session('dicasDisponiveis')+1]);
     }
@@ -383,7 +412,6 @@ public function pedeDica() {
         session(['dicasUsadas' => session('dicasUsadas')+1]);
     }
 }
-
 
 }
 
