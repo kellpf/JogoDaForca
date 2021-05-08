@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+<title>Jogo da Forca</title>
 @section('content')
 <div class="row justify-content-center">
 <h1>Boa sorte {{$jogadores[0]->name}}!</h1><br>
@@ -22,12 +23,11 @@
 <div class="row justify-content-center">
     <img src="{{ asset('storage/image/dicas/'.'U'.session('dicasUsadas').'.png') }}" alt="HTML5 Doctor Logo" width="200px" heidth="100px"/>
 </div>
-<div class="row justify-content-center">
-    <span>Dicas Disponíveis</span>
-</div>
 <div id="dicasDisponiveis" class="row justify-content-center">
-    <input type="text" id="dicasDisponiveis" value="{{session('dicasDisponiveis')}}" style="width: 400px;" disabled>
-    <button type="button" class="btn btn-warning"><strong>Pedir Dica</strong></button>
+    <span>Dicas Disponíveis: </span><input type="text" id="dicasDisponiveis" style="width: 18px;" value="{{session('dicasDisponiveis')}}" style="width: 400px;" disabled>
+    @if(session('dicasDisponiveis') > 0)
+        <button id="btnDicas" type="button" class="btn btn-warning" onclick="pedirUmadica();" {{session('btnDicas')}}><strong>Pedir Dica</strong></button>
+    @endif
 </div>
 <div class="row justify-content-center">
     <span>Letras Já Utilizadas</span>
@@ -92,6 +92,7 @@
     </div>
 </form>
 </div>
+
 @endsection
 
 <script type="text/javascript">
@@ -150,6 +151,25 @@ function palavraEmTela(){
 }
 setInterval(palavraEmTela, 1000);
 
+
+function pedirUmadica(){
+    if (window.XMLHttpRequest) {
+        requisicao = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+        requisicao = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    var url = "/pedeDica";
+    requisicao.open("Get", url, true);
+    requisicao.send();
+          @forelse ($dicasDasPalavras as $dica)
+              alert('Dica: {{$dica->tip}}');
+          @empty
+              alert('Dica não cadastrada!');
+          @endforelse
+          document.getElementById("btnDicas").disabled = true;
+}
+
+
 function revelaLetra(letra) {
 
             document.getElementById(""+letra.toUpperCase()).disabled = true;
@@ -175,6 +195,5 @@ function revelaLetra(letra) {
 
     palavraEmTela();
 }
-
 </script>
 

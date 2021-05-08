@@ -27,7 +27,7 @@ Route::get('/jogoRevelaLetra/{players_words_id}/{letra}', 'JogadoresController@j
 Route::get('/palavraSessao/{palavra}', 'JogadoresController@palavraSessao')->name('palavraSessao');
 Route::get('/atualizarDadosDaPartida', 'JogadoresController@atualizarDadosDaPartida')->name('atualizarDadosDaPartida');
 
-Route::get('/calcularDica', 'JogadoresController@calcularDica')->name('calcularDica');
+Route::get('/pedeDica', 'JogadoresController@pedeDica')->name('pedeDica');
 
 //---------------------- EXIBE JOGADOR -------------------------------------
 Route::get('/exibe_jogadores', 'AdminController@exibe_jogadores')->name('exibe_jogadores');

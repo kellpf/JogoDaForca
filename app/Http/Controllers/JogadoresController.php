@@ -6,6 +6,7 @@ use App\Models\CategoriasPalavras;
 use App\Models\Jogadores;
 use App\Models\JogadoresPalavrasModel;
 use App\Models\Palavras;
+use App\Models\Dicas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -117,6 +118,7 @@ class JogadoresController extends Controller
             $this->zeraSessoes();
             session(['dicasDisponiveis' => 0]);
             session(['dicasUsadas' => 0]);
+            session(['btnDicas' => 'disabled']);
 
         /* Início palavra inicial */
 
@@ -140,7 +142,10 @@ public function jogo() {
 
     $jogadores = Jogadores::where('id', $jogadorId)->get();
     $jogadoresPalavrasModel = JogadoresPalavrasModel::where('player_id', $jogadorId)->where('status', 0)->get();
-    try { $palavras = Palavras::where('id', $jogadoresPalavrasModel[0]->word_id)->get(); } catch (Exception $e) { return view('tryJogo'); }
+    try {
+        $palavras = Palavras::where('id', $jogadoresPalavrasModel[0]->word_id)->get();
+        $dicasDasPalavras = Dicas::where('word_id', $jogadoresPalavrasModel[0]->word_id)->get();
+    } catch (Exception $e) { return view('tryJogo'); }
     $letras = array();
     $dica = '';
     foreach ($palavras as $palavra) {
@@ -152,7 +157,7 @@ public function jogo() {
     for ($i = 0; $i < strlen($word); $i++) {
         $letras[$i] = $word[$i];
     }
-   return view('jogo', compact('jogadores', 'jogadoresPalavrasModel', 'dica', 'word', 'letras'));
+   return view('jogo', compact('jogadores', 'jogadoresPalavrasModel', 'dica', 'word', 'letras', 'dicasDasPalavras'));
 
 }
 
@@ -324,6 +329,7 @@ public function zeraSessoes() {
 
     session(['divMensagemShow' => '']);
     session(['divMensagem' => '']);
+    session(['btnDicas' => '']);
 
 }
 public function atualizarDadosDaPartida(Request $request) {
@@ -373,44 +379,19 @@ public function salvaPontuacao() {
 
 }
 
-public function calcularDica() {
-
-    session(['dicasDisponiveis' => 2]);
-    session(['dicasUsadas' => 2]);
-
-    $dicas = JogadoresPalavrasModel::where('player_id', 98 /*session('jogadorId')*/)->where('status', 1)->select(DB::raw('round(COUNT(*)/3 ,0) as dica'))->get();
-    $qtdDicas = 0;
-    foreach($dicas as $dica) {
-        $qtdDicas = $dica->dica;
-    }
-
-    if($qtdDicas > 3) {
-        $qtdDicas = 3;
-    }
-
-    if($qtdDicas > session('dicasDisponiveis')) {
-        session(['dicasDisponiveis' => ( $qtdDicas - session('dicasUsadas') ) ]);
-    }
-
-    if(session('dicasDisponiveis')<0) {
-        session(['dicasDisponiveis' => 0]);
-    }
-
-    return session('dicasDisponiveis');
-    #session('dicasUsadas');
-
-}
-
 public function adicionaDica() {
-    if(session('dicasDisponiveis') <3 ) {
+    if(session('dicasUsadas') < 3 ) {
         session(['dicasDisponiveis' => session('dicasDisponiveis')+1]);
     }
 }
 
 public function pedeDica() {
-    if(session('dicasDisponiveis') > 0  && session('dicasDisponiveis') < 4 && session('dicasUsadas') <3) {
+    if(session('dicasDisponiveis') > 0  && session('dicasDisponiveis') < 4 && session('dicasUsadas') < 3) {
+        session(['dicasDisponiveis' => session('dicasDisponiveis')-1]);
         session(['dicasUsadas' => session('dicasUsadas')+1]);
     }
+    session(['btnDicas' => 'disabled']);
+    return 'Dicas!';
 }
 
 }
