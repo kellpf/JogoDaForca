@@ -5,6 +5,9 @@
 <div class="row justify-content-center">
 <h1>Boa sorte {{$jogadores[0]->name}}!</h1><br>
 </div>
+<div class="row justify-content-center">
+<h2>Você tem {{$jogadores[0]->punctuation}} pontos.</h2><br>
+</div>
 
 <div id="divAcertos">
 @for($i = 0; $i < strlen($word); $i++)
@@ -81,7 +84,7 @@
         <br>
 {{--     </div> --}}
     <div class="row justify-content-center">
-        <h2>{{$dica}}</h2>
+        {{-- <h2>{{$dica}}</h2> --}}
     </div>
     <div id="letrasVisiveis" class="row justify-content-center">
         @for ($i = 0; $i < strlen($word); $i++)
