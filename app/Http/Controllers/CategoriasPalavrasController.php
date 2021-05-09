@@ -4,40 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\CategoriasPalavras;
 use App\Models\Palavras;
+use Exception;
 use Illuminate\Http\Request;
 
 class CategoriasPalavrasController extends Controller
 {
 
     // public function __construct()
-    // {         
-    //     $this->middleware('auth');     
+    // {
+    //     $this->middleware('auth');
     // }
 
     public function nova_categoria(Request $request)
     {
         $nameGroup = $request->group;
+        $situacao = '';
 
-        if($nameGroup){
-            $newGroup = new CategoriasPalavras();
-            $newGroup->group = $nameGroup;
-            $newGroup->save();
+        if (!CategoriasPalavras::where('group', $nameGroup)->first()) {
+            try {
+                $newGroup = new CategoriasPalavras();
+                $newGroup->group = $nameGroup;
+                $newGroup->save();
+                //dd($newGroup->id);
+                $situacao = 'sucesso';
+            } catch (Exception $e) {
+                $situacao = '';
+            }
         } else {
-            $request->session()->flash('flash_erro', '');
+            $situacao = 'erro';
         }
-        return view('novaCategoria');
-        
+        return view('novaCategoria', compact('situacao'));
     }
 
     public function create(Request $request)
     {
         $categoria = $request->categoria;
 
-        if (!CategoriasPalavras::where('group', $request->categoria)->first()) {
-            $categoriaPalavra = new CategoriasPalavras();
-            $categoriaPalavra->group = $categoria;
-            $categoriaPalavra->save();
-        } else {
+        $catTeste = CategoriasPalavras::where('group', $request->categoria)->first();
+        try {
+            if (!CategoriasPalavras::where('group', $request->categoria)->first()) {
+                $categoriaPalavra = new CategoriasPalavras();
+                $categoriaPalavra->group = $categoria;
+                $categoriaPalavra->save();
+            } else {
+                $request->session()->flash('flash_success', '');
+            }
+        } catch (Exception $e) {
             $request->session()->flash('flash_erro', '');
         }
     }
@@ -51,7 +63,7 @@ class CategoriasPalavrasController extends Controller
         return view('exibeCategorias', compact('categorias'));
     }
 
-    public function busca_palavra($id) 
+    public function busca_palavra($id)
     {
         $palavras = Palavras::where('group_id', $id)->get();
         return view('palavras', compact('palavras', 'id'));
@@ -63,13 +75,14 @@ class CategoriasPalavrasController extends Controller
         return redirect()->route('index_categoria');
     }
 
-    public function nova_palavra(Request $request){
+    public function nova_palavra(Request $request)
+    {
         $group = CategoriasPalavras::where('id', $request->id)->get();
 
         return view('novaPalavra', compact('group'));
     }
 
-    public function deleta_palavra($id) 
+    public function deleta_palavra($id)
     {
         $palavras = Palavras::destroy($id);
     }

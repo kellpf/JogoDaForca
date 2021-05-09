@@ -14,7 +14,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-10 ml-3">
+            <div class="ml-3 col-10">
                 <button type="button" class="btn btn-dark">
                     <a class="nav-link" href="{{route('index_categoria')}}" style="color: white;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -27,9 +27,9 @@
         </div>
 
 
-        <div class="col-10 mt-3">
+        <div class="mt-3 col-10">
             <div class="container" style="background-color: white;">
-                <div class="justify-content-lg-center d-flex p-5">
+                <div class="p-5 justify-content-lg-center d-flex">
                     <form action="{{route('nova_categoria')}}" method="post">
                         {{csrf_field()}}
                         <div class="form-group">
@@ -37,10 +37,10 @@
                                 <label for="categoria" class="form-label">Grupo de Palavra</label>
                                 <input type="text" class="form-control" id="group" name="group" placeholder="Nome do grupo de palavra" required>
                             </div>
-                            <div class="col text-center">
+                            <div class="text-center col">
                                 <button type="submit" class="btn btn-dark">Cadastrar</button>
                             </div>
-                            
+                            {{$situacao}}
                         </div>
                     </form>
                 </div>
