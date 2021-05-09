@@ -2,6 +2,9 @@
 
 <title>Jogo da Forca</title>
 @section('content')
+<div class="row justify-content-center">
+    <a style="font-size: 20px;" href="/">Jogar Novamente</a>
+</div>
 <center>
 <div style="width: 500px;">
 @php $i = 1; @endphp

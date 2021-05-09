@@ -116,6 +116,7 @@ class JogadoresController extends Controller
             session(['jogadorId' => $jogador->id]);
 
             $this->zeraSessoes();
+            session(['sequenciaDeVitorias' => 0]);
             session(['dicasDisponiveis' => 0]);
             session(['dicasUsadas' => 0]);
             session(['btnDicas' => 'disabled']);
@@ -128,7 +129,8 @@ class JogadoresController extends Controller
         } else {
             $request->session()->flash('flash_erro', '');
             $categoriaPalavras = CategoriasPalavras::all();
-            return view('welcome', ['categoriaPalavras' => $categoriaPalavras]);
+            //return view('welcome', ['categoriaPalavras' => $categoriaPalavras]);
+            return redirect('/');
         }
 
     }
@@ -345,15 +347,9 @@ public function atualizarDadosDaPartida(Request $request) {
         $this->salvaPontuacao();
 
         DB::update('update players_words set status = 1 where player_id = ? and status = ?', [session('jogadorId'), 0]);
-        $this->adicionaDica();
-/*
-        $jogadoresPalavrasModel = JogadoresPalavrasModel::where('player_id', session('jogadorId'))->where('status', 0);
-        $jogadoresPalavrasModel->status = 1;
-        $jogadoresPalavrasModel->save();
-*/
         if(session('sequenciaDoJogo') == 'continuar') {
-
-                $this->carregarPalavra();
+            $this->sequenciaDeVitorias();
+            $this->carregarPalavra();
 
                 return redirect('/jogoDaForca');
 
@@ -368,7 +364,6 @@ public function sequenciaDoJogo($sequenciaDoJogo) {
 }
 
 public function salvaPontuacao() {
-    #Salvar a pontuação antes do fim da partida antes de fazer o update: session('pontuacao');
     if(session('sequenciaDoJogo') == 'parar'){
         #se errou a palavra
             DB::update("update players set punctuation = punctuation + (? * 5) where id = ?", [session('acertos'), session('jogadorId')]);
@@ -379,6 +374,13 @@ public function salvaPontuacao() {
 
 }
 
+public function sequenciaDeVitorias() {
+    session(['sequenciaDeVitorias' => session('sequenciaDeVitorias')+1]); //Adicona uma vitória
+    $mod = session('sequenciaDeVitorias') % 2; //Pega o resto da divisão
+    if($mod == 0) { //Se for redondo, ouseja, vitória em sequência, adiciona uma dica
+        $this->adicionaDica();
+    }
+}
 public function adicionaDica() {
     if(session('dicasUsadas') < 3 ) {
         session(['dicasDisponiveis' => session('dicasDisponiveis')+1]);

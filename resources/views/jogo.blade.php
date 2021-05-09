@@ -16,6 +16,7 @@
 <input id="acertos" type="hidden" value="{{session('acertos')}}">
 <input id="validaLetra" type="hidden" value="{{session('validaLetra')}}">
 <input id="ultimaLetra" type="hidden" value="{{session('ultimobotaoclicado')}}">
+<input id="sequenciaDeVitorias" type="hidden" value="{{session('sequenciaDeVitorias')}}">
 <div id="dicasDoUsuario" class="row justify-content-center">
     <img src="{{ asset('storage/image/forca/'.session('erros').'.png') }}" alt="HTML5 Doctor Logo" width="200px" heidth="100px"/>
 </div>
@@ -26,7 +27,11 @@
 <div id="dicasDisponiveis" class="row justify-content-center">
     <span>Dicas Disponíveis: </span><input type="text" id="dicasDisponiveis" style="width: 18px;" value="{{session('dicasDisponiveis')}}" style="width: 400px;" disabled>
     @if(session('dicasDisponiveis') > 0)
+    @forelse ($dicasDasPalavras as $ddddd)
         <button id="btnDicas" type="button" class="btn btn-warning" onclick="pedirUmadica();" {{session('btnDicas')}}><strong>Pedir Dica</strong></button>
+    @empty
+        <button id="btnDicas" type="button" class="btn btn-warning" onclick="semDicas();"><strong>Pedir Dica</strong></button>
+    @endforelse
     @endif
 </div>
 <div class="row justify-content-center">
@@ -152,6 +157,9 @@ function palavraEmTela(){
 setInterval(palavraEmTela, 1000);
 
 
+function semDicas(){
+    alert('Nenhuma dica foi cadastrada para esta palavra!');
+}
 function pedirUmadica(){
     if (window.XMLHttpRequest) {
         requisicao = new XMLHttpRequest();
@@ -164,7 +172,7 @@ function pedirUmadica(){
           @forelse ($dicasDasPalavras as $dica)
               alert('Dica: {{$dica->tip}}');
           @empty
-              alert('Dica não cadastrada!');
+              alert('Nenhuma dica foi cadastrada para esta palavra!');
           @endforelse
           document.getElementById("btnDicas").disabled = true;
 }

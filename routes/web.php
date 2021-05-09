@@ -28,6 +28,7 @@ Route::get('/jogoRevelaLetra/{players_words_id}/{letra}', 'JogadoresController@j
 Route::get('/palavraSessao/{palavra}', 'JogadoresController@palavraSessao')->name('palavraSessao');
 Route::get('/atualizarDadosDaPartida', 'JogadoresController@atualizarDadosDaPartida')->name('atualizarDadosDaPartida');
 
+//Route::get('/sequenciaDeVitorias', 'JogadoresController@sequenciaDeVitorias')->name('sequenciaDeVitorias');
 Route::get('/pedeDica', 'JogadoresController@pedeDica')->name('pedeDica');
 
 //---------------------- RANKING -------------------------------------
