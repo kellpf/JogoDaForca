@@ -43,7 +43,8 @@ Route::get('/deleta_jogador/{id}', 'AdminController@deleta_jogador')->name('dele
 
 //---------------------- CADASTRO CATEGORIA DE PALAVRA ----------------------------
 Route::get('/categorias', 'CategoriasPalavrasController@nova_categoria')->name('index_categoria');
-Route::post('/nova_categoria', 'CategoriasPalavrasController@create')->name('nova_categoria');
+Route::post('/nova_categoria', 'CategoriasPalavrasController@nova_categoria')->name('nova_categoria');
+Route::get('/categoria', 'CategoriasPalavrasController@nova_categoria')->name('categoria');
 
 //---------------------- EXIBE CATEGORIAS DE PALAVRAS ----------------------------
 Route::get('/exibe_categorias', 'CategoriasPalavrasController@exibe_categoriasPalavras')->name('index_categoria');
@@ -53,6 +54,12 @@ Route::get('/deleta_categoriaPalavra/{id}', 'CategoriasPalavrasController@deleta
 
 //---------------------- EXIBE PALAVRA POR ID --------------------------------------
 Route::get('/exibe_palavra/{id}', 'CategoriasPalavrasController@busca_palavra')->name('busca_palavra');
+
+//---------------------- NOVA PALAVRA --------------------------------------
+Route::get('/nova_palavra/{id?}', 'CategoriasPalavrasController@nova_palavra')->name('nova_palavra');
+
+//---------------------- NOVA PALAVRA --------------------------------------
+Route::get('/deleta_palavra/{id}', 'CategoriasPalavrasController@deleta_palavra')->name('deleta_palavra');
 
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

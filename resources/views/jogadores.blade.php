@@ -2,19 +2,11 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Jogadores</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Palavras</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Grupo de Palavras</a>
-            </li>
-        </ul>
-    </div>
+    <nav class="navbar-dark bg-dark justify-content-lg-center d-flex">
+        <a class="navbar-brand mr-3" href="{{route('exibe_jogadores')}}">Jogadores</a>
+        <a class="navbar-brand">|</a>
+        <a class="navbar-brand ml-1" href="{{route('index_categoria')}}">Manutenção de Palavras</a>
+    </nav>
 
     <div class="row">
         <table class="table table-striped mt-4">
