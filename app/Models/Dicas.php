@@ -12,6 +12,6 @@ class Dicas extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
-        'word_id'
+        'word_id', 'tip'
     ];
 }

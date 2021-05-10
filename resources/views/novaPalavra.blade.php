@@ -15,25 +15,41 @@
   @extends('layouts.app')
   @section('content')
 
+  <div class="row ">
+    <div class="ml-5 col-10">
+        <button type="button" class="btn btn-dark">
+            <a href="{{route('index_categoria')}}" style="color: white;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+                Voltar
+            </a>
+        </button>
+    </div>
+</div>
+
   <div class="col-7 container p-3 mt-2" style="background-color: white;">
-    <form>
+    <form action="{{route('cadastro_palavra')}}" method="post">
+      {{csrf_field()}}
+
       <div class="mb-3">
         @foreach($group as $p)
         <label for="exampleInputEmail1" class="form-label">Categoria</label>
-        <input type="hidden" readonly  placeholder="{{$p->id}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        <input type="text" readonly  placeholder="{{$p->group}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input type="hidden" readonly value="{{$p->id}}"  class="form-control" name="idGroup" id="idGroup" aria-describedby="emailHelp" > 
+        <input type="text" readonly  placeholder="{{$p->group}}" class="form-control"  aria-describedby="emailHelp" >
         @endforeach
       </div>
       <div class="mb-3">
         <label for="word" class="form-label">Palavra</label>
-        <input type="text" class="form-control" id="word">
+        <input type="text" class="form-control" id="word" name="word" required>
       </div>
       <div class="mb-3">
         <label for="hint" class="form-label">Dica</label>
-        <input type="text" class="form-control" id="hint">
+        <input type="text" class="form-control" id="hint" name="hint" required>
       </div>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="text-center">
+      <button type="submit" class="btn btn-dark">Cadastrar</button>
+      </div>
     </form>
   </div>
   @endsection

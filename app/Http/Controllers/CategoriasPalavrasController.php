@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoriasPalavras;
+use App\Models\Dicas;
 use App\Models\Palavras;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,13 +26,12 @@ class CategoriasPalavrasController extends Controller
                 $newGroup = new CategoriasPalavras();
                 $newGroup->group = $nameGroup;
                 $newGroup->save();
-                //dd($newGroup->id);
-                $situacao = 'sucesso';
+                $situacao = 'Grupo de palavra adicionado com sucesso!';
             } catch (Exception $e) {
                 $situacao = '';
             }
         } else {
-            $situacao = 'erro';
+            $situacao = 'Esse grupo de palavra já existe!';
         }
         return view('novaCategoria', compact('situacao'));
     }
@@ -80,6 +80,29 @@ class CategoriasPalavrasController extends Controller
         $group = CategoriasPalavras::where('id', $request->id)->get();
 
         return view('novaPalavra', compact('group'));
+    }
+
+    public function cadastro_nova_palavra(Request $request)
+    {
+        $palavra = $request->word;
+        $idGrupoPalavra = $request->idGroup;
+        $dica = $request->hint; 
+
+        if(!Palavras::where('word', $palavra)->get()) {
+            $novaPalavra = new Palavras();
+            $novaPalavra->word = $palavra;
+            $novaPalavra->group_id = $idGrupoPalavra;
+            $novaPalavra->save();
+
+            $dicaPalavra = new Dicas();
+            $dicaPalavra->word_id = $novaPalavra->id;
+            $dicaPalavra->tip = $dica;
+            $dicaPalavra->save();
+            $status = 'Palavra adicionada com sucesso!';
+        } else {
+            $status = 'Essa palavra já existe!';
+        }
+        return redirect()->route('nova_palavra', ['id' => $idGrupoPalavra]);
     }
 
     public function deleta_palavra($id)

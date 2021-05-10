@@ -9,7 +9,8 @@
     </nav>
 
     <div class="row">
-        <table class="table table-striped mt-4">
+        <h4 class="ml-1 mt-4" style="color: gray;">Jogadores</h4>
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">#id</th>
