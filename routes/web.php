@@ -56,7 +56,7 @@ Route::get('/deleta_categoriaPalavra/{id}', 'CategoriasPalavrasController@deleta
 Route::get('/exibe_palavra/{id}', 'CategoriasPalavrasController@busca_palavra')->name('busca_palavra');
 
 //---------------------- NOVA PALAVRA --------------------------------------
-Route::get('/nova_palavra/{id?}', 'CategoriasPalavrasController@nova_palavra')->name('nova_palavra');
+Route::get('/nova_palavra/{id?}/{status?}', 'CategoriasPalavrasController@nova_palavra')->name('nova_palavra');
 Route::post('/cadastro_palavra', 'CategoriasPalavrasController@cadastro_nova_palavra')->name('cadastro_palavra');
 
 //---------------------- NOVA PALAVRA --------------------------------------

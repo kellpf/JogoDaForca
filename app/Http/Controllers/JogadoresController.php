@@ -27,7 +27,10 @@ class JogadoresController extends Controller
         $group_word = $request->group_word;
         session(['is_randon_group_word' => $group_word]);
         if ($group_word == 0) {
-            $categoria = CategoriasPalavras::all()->random(1);
+            $categoria = CategoriasPalavras::
+            join('words', 'words.group_id', 'group_of_words.id')
+            ->get()
+            ->random(1);
             $group_word = $categoria[0]->id;
         }
         session(['group_word' => $group_word]);
@@ -267,7 +270,10 @@ try {
 
     $group_word = session('is_randon_group_word');
     if ($group_word == '0') {
-        $categoria = CategoriasPalavras::all()->random(1);
+        $categoria = CategoriasPalavras::
+        join('words', 'words.group_id', 'group_of_words.id')
+        ->get()
+        ->random(1);
         $group_word = $categoria[0]->id;
     }
     session(['group_word' => $group_word]);
