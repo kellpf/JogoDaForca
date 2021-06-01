@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
 <nav class="navbar-dark bg-dark justify-content-lg-center d-flex">
-        <a class="navbar-brand mr-3" href="{{route('exibe_jogadores')}}">Jogadores</a>
+        <a class="mr-3 navbar-brand" href="{{route('exibe_jogadores')}}">Jogadores</a>
         <a class="navbar-brand">|</a>
-        <a class="navbar-brand ml-1" href="{{route('index_categoria')}}">Manutenção de Palavras</a>
+        <a class="ml-1 navbar-brand" href="{{route('index_categoria')}}">Manter categorias de Palavras</a>
     </nav>
 </div>
 @endsection
