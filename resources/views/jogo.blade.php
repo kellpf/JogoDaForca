@@ -50,6 +50,7 @@
 {{--     <div class="row justify-content-center" id="divAdivinharLetra"> --}}
         {{-- G #00FA9A --}}
         {{-- R #E9967A --}}
+<div id="divDasLetras">
         <div class="row justify-content-center" id="divAdivinharLetra">
         <button type='button' id='Q' value='Q' style='background-color: #ADD8E6;' onclick="revelaLetra(this.value);" {{session('Q')}}>Q</button>
         <button type='button' id='W' value='W' style='background-color: #ADD8E6;' onclick="revelaLetra(this.value);" {{session('W')}}>W</button>
@@ -80,7 +81,7 @@
         <button type='button' id='B' value='B' style='background-color: #ADD8E6;' onclick="revelaLetra(this.value);" {{session('B')}}>B</button>
         <button type='button' id='N' value='N' style='background-color: #ADD8E6;' onclick="revelaLetra(this.value);" {{session('N')}}>N</button>
         <button type='button' id='M' value='M' style='background-color: #ADD8E6;' onclick="revelaLetra(this.value);" {{session('M')}}>M</button></div>
-
+</div>
         <br>
 {{--     </div> --}}
     <div class="row justify-content-center">
@@ -116,6 +117,8 @@ function refreshDiv(){
                 document.getElementById("divMensagem").className = "row justify-content-center alert alert-danger"; */
 //                document.getElementById("divMensagem").innerHTML = "<h3>Que pena, tente novamente!</h3>";
                 document.getElementById("sequenciaDoJogo").style.display = "";
+                //Todos as letras devem bloquear
+        document.getElementById("divDasLetras").style.display = "none";
     }
     if(palavraEmTelaAtual.toLowerCase() == palavra) {
                 //document.getElementById("adivinharLetra").disabled = true;
