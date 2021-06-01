@@ -11,8 +11,8 @@ class AdminController extends Controller
 {
 
     // public function __construct()
-    // {         
-    //     $this->middleware('auth');     
+    // {
+    //     $this->middleware('auth');
     // }
 
     /**
@@ -26,7 +26,7 @@ class AdminController extends Controller
     }
 
     public function exibe_jogadores(){
-        $jogadores = Jogadores::all();
+        $jogadores = Jogadores::orderByRaw("name asc")->get();
         return view('jogadores', ['jogadores' => $jogadores]);
     }
 
@@ -35,5 +35,5 @@ class AdminController extends Controller
         return redirect()->route('exibe_jogadores');
     }
 
-  
+
 }
