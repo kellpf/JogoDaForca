@@ -46,7 +46,7 @@
       </div>
       <div class="mb-3">
         <label for="word" class="form-label">Palavra</label>
-        <input type="text" class="form-control" id="word" name="word" required>
+        <input type="text" class="form-control" id="word" name="word" onkeypress="return lettersOnly(event);" required>
       </div>
       <div class="mb-3">
         <label for="hint" class="form-label">Dica</label>
@@ -59,5 +59,22 @@
   </div>
   @endsection
 </body>
+
+<script>
+
+    function lettersOnly(evt) {
+        evt = (evt) ? evt : event;
+        var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+            ((evt.which) ? evt.which : 0));
+        if (charCode > 31 && (charCode < 65 || charCode > 90) &&
+            (charCode < 97 || charCode > 122)) {
+            alert("Atenção! Digite apenas letras!");
+            return false;
+        }
+        return true;
+    }
+
+</script>
+
 
 </html>
