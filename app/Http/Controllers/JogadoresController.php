@@ -15,7 +15,7 @@ class JogadoresController extends Controller
 {
     public function index()
     {
-        $categoriaPalavras = CategoriasPalavras::all();
+        $categoriaPalavras = CategoriasPalavras::whereRaw("EXISTS (SELECT * FROM words WHERE words.group_id = group_of_words.id)")->get();
         return view('welcome', ['categoriaPalavras' => $categoriaPalavras]);
     }
 
@@ -28,7 +28,8 @@ class JogadoresController extends Controller
         session(['is_randon_group_word' => $group_word]);
         if ($group_word == 0) {
             $categoria = CategoriasPalavras::
-            join('words', 'words.group_id', 'group_of_words.id')
+            /*join('words', 'words.group_id', 'group_of_words.id')
+            ->*/whereRaw("EXISTS (SELECT * FROM words WHERE words.group_id = group_of_words.id)")
             ->get()
             ->random(1);
             $group_word = $categoria[0]->id;
@@ -38,6 +39,8 @@ class JogadoresController extends Controller
         /* Início palavra inicial */
 
         $palavras = Palavras::where('group_id', $group_word)->get()->random(1);
+        #$palavras = DB::select("SELECT * FROM words WHERE group_id = ? LIMIT 1", [$group_word]);
+
         $letras = array();
 
         $dica = '';
@@ -269,20 +272,37 @@ public function carregarPalavra() {
 try {
 
     $group_word = session('is_randon_group_word');
+    $tmp_word = 0;
     if ($group_word == '0') {
-        $categoria = CategoriasPalavras::
-        join('words', 'words.group_id', 'group_of_words.id')
+/*         $categoria = CategoriasPalavras::
+        whereRaw("EXISTS (SELECT * FROM words WHERE words.group_id = group_of_words.id)")
         ->get()
-        ->random(1);
+        ->random(1); */
+
+        $categoria = DB::select("
+        SELECT gw.*, w.id word_id
+        FROM group_of_words gw
+        JOIN words w ON w.group_id = gw.id
+        WHERE NOT EXISTS (
+        SELECT * FROM players_words WHERE players_words.word_id = w.id AND players_words.player_id = ".session('jogadorId')."
+        )
+        AND
+        EXISTS (SELECT * FROM words wd WHERE w.id = wd.id)
+        LIMIT 1;");
         $group_word = $categoria[0]->id;
+        $tmp_word = $categoria[0]->word_id;
     }
     session(['group_word' => $group_word]);
 
+    if($tmp_word >= 0) {
+        $palavras = DB::select("SELECT * FROM words WHERE id = ".$tmp_word." LIMIT 1");
+    } else {
         $palavras = DB::select('SELECT * FROM words WHERE NOT EXISTS (
         SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ?
         ) and group_id = ?
         LIMIT 1
         ', [session('jogadorId'), $group_word]);
+        }
 
         $letras = array();
 
