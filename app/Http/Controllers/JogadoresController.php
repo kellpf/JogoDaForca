@@ -291,17 +291,29 @@ try {
         LIMIT 1;");
         $group_word = $categoria[0]->id;
         $tmp_word = $categoria[0]->word_id;
-    }
-    session(['group_word' => $group_word]);
-
-    if($tmp_word >= 0) {
+        session(['group_word' => $group_word]);
         $palavras = DB::select("SELECT * FROM words WHERE id = ".$tmp_word." LIMIT 1");
-    } else {
-        $palavras = DB::select('SELECT * FROM words WHERE NOT EXISTS (
+        } else {
+        $categoria = DB::select("
+        SELECT gw.*, w.id word_id
+        FROM group_of_words gw
+        JOIN words w ON w.group_id = gw.id
+        WHERE gw.id = ".session('group_word')." and NOT EXISTS (
+        SELECT * FROM players_words WHERE players_words.word_id = w.id AND players_words.player_id = ".session('jogadorId')."
+        )
+        AND
+        EXISTS (SELECT * FROM words wd WHERE w.id = wd.id)
+        LIMIT 1;");
+        $group_word = $categoria[0]->id;
+        $tmp_word = $categoria[0]->word_id;
+        $palavras = DB::select("SELECT * FROM words WHERE id = ".$tmp_word." LIMIT 1");
+
+/*         $palavras = DB::select('SELECT * FROM words WHERE NOT EXISTS (
         SELECT * FROM players_words WHERE players_words.word_id = words.id AND players_words.player_id = ?
         ) and group_id = ?
         LIMIT 1
-        ', [session('jogadorId'), $group_word]);
+        ', [session('jogadorId'), $group_word]); */
+
         }
 
         $letras = array();
